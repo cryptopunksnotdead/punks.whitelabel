@@ -1,0 +1,80 @@
+<html>
+   <head>
+     <title>Test jquery.table.js - Table Sorter, Filter & More</title>
+     <!-- use CDN; replace w/ local version if needed -->
+     <script src='http://code.jquery.com/jquery.min.js'></script> 
+     <script src='jquery.table.js'></script>
+     
+     <style>
+        
+  a, a:visited  {
+    color: black;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    background-color: yellow;
+    text-decoration: underline;
+  }
+  
+/* add hover effect for table rows */  
+  td.hovered {  
+     background-color: aqua; /* lightblue; */ 
+     /* color: #666;  */
+  }
+    
+  td.sortable {
+    cursor: pointer;
+  }
+  
+  td.sortable:hover {
+    background-color: yellow; 
+    text-decoration: underline;    
+  }
+  
+  td.sorted-asc,
+  td.sorted-desc 
+  {
+    background-color: black;
+    color: white;
+  }
+
+  td.sortable.sorted-asc:hover,
+  td.sortable.sorted-desc:hover
+  {
+    color: black;
+  }
+        
+     </style>
+   </head>
+   <body>
+    
+
+    
+<label for="filter">Filter</label>  
+<input type="text" name="filter" value="" id="filter" />
+
+    
+    
+<table>
+   <thead>
+     <tr class='sortable' style='background-color: silver;'>
+        <td>number</td>
+        <td>string</td>
+        <td>date</td>
+        <td>do not sort</td>
+     </tr>
+   </thead>
+   <tbody>
+     <tr><td>2</td><td>apple</td></tr>
+     <tr><td>15</td><td>banana</td></tr>
+     <tr><td>-53</td><td>orange</td></tr>
+   </tbody>
+   <tfoot>
+     <tr><td></td><td></td></tr>    
+   </tfoot>
+</table>    
+    
+    
+   </body>
+</html>
