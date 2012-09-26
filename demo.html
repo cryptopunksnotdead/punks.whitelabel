@@ -1,0 +1,132 @@
+<html>
+   <head>
+     <title>Test jquery.table.js - Table Sorter, Filter & More</title>
+     <!-- use CDN (content delivery network); replace w/ local version if needed -->
+     <script src='http://code.jquery.com/jquery.min.js'></script> 
+     <script src='jquery.table.js'></script>
+   
+<script>
+   
+  $(document).ready(function() {
+  
+      table_hovered( 'table tr.row' );  
+
+      table_filter( '#filter1', '#table1 tr.row' );
+  
+      table_filter( '#filter2', '#table2 tr.row' );
+      
+      table_sorter( '#table1' );
+
+      table_sorter( '#table2' );
+  
+  }); // document.ready   
+   
+</script>   
+     
+     <style>
+         
+  /* add hover effect for table rows */  
+  td.hovered {  
+     background-color: aqua; 
+  }
+    
+  td.sortable {
+    cursor: pointer;
+  }
+  
+  td.sortable:hover {
+    background-color: yellow; 
+    text-decoration: underline;    
+  }
+  
+  td.sorted-asc,
+  td.sorted-desc 
+  {
+    background-color: black;
+    color: white;
+  }
+
+  td.sortable.sorted-asc:hover,
+  td.sortable.sorted-desc:hover
+  {
+    color: black;
+  }
+        
+     </style>
+   </head>
+   <body>
+    
+
+    
+<label for="filter1">Filter</label>  
+<input type="text" name="filter1" value="" id="filter1" />
+
+    
+    
+<table id="table1">
+   <thead>
+     <tr class='sortable' style='background-color: silver;'>
+        <td class='sortable'>number (int)</td>
+        <td class='sortable'>number (float)</td>
+        <td class='sortable'>string</td>
+        <td class='sortable'>date</td>
+        <td>do not sort</td>
+     </tr>
+   </thead>
+   <tbody>
+     <tr class='row sortable'><td>2</td><td>-.18</td><td>apple</td><td>Mar 15, 1986</td></tr>
+     <tr class='row sortable'><td>15</td><td>88.5</td><td>banana</td><td>Aug 07, 2004</td></tr>
+     <tr class='row sortable'><td>-53</td><td>-858</td><td>orange</td><td>Feb 27, 2086</td></tr>
+   </tbody>
+</table>    
+    
+
+
+
+<label for="filter2">Filter</label>  
+<input type="text" name="filter1" value="" id="filter2" />
+
+    
+    
+<table id="table2">
+   <thead>
+     <tr class='sortable' style='background-color: silver;'>
+        <td class='sortable'>number (int)</td>
+        <td class='sortable'>number (float)</td>
+        <td class='sortable'>string</td>
+        <td class='sortable'>date</td>
+        <td>do not sort</td>
+     </tr>
+   </thead>
+   <tbody>
+     <tr class='row sortable'>
+      <td><input type='text' value='2'></td>
+      <td><input type='text' value='-.18'></td>
+      <td><input type='text' value='apple'></td>
+      <td><input type='text' value='Mar 15, 1986'></td>
+     </tr>
+     <tr class='row sortable'>
+      <td><input type='text' value='15'></td>
+      <td><input type='text' value='88.5'></td>
+      <td><input type='text' value='banana'></td>
+      <td><input type='text' value='Aug 07, 2004'></td>
+     </tr>
+     <tr class='row sortable'>
+      <td><input type='text' value='-53'></td>
+      <td><input type='text' value='-858'></td>
+      <td><input type='text' value='orange'></td>
+      <td><input type='text' value='Feb 27, 2086'></td>
+     </tr>
+   </tbody>
+   <tfoot>
+     <tr class='row'><td><input type='text'></td>
+         <td><input type='text'></td>
+         <td><input type='text'></td>
+         <td><input type='text'></td>
+     </tr>    
+   </tfoot>
+</table>    
+
+    
+   </body>
+</html>

@@ -1,6 +1,6 @@
-## What's `jquery.table.js`?
+## What is `jquery.table.js`?
 
-Table Sorter, Filter & more in JavaScript w/ jQuery
+Lets you sort, filter tables using JavaScript w/ jQuery
 
 ## How to use
 

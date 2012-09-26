@@ -8,7 +8,19 @@
     use data-cell|table|??
    
 */
+  
+  function table_hovered( table_rows_selector )
+  {
+    $( table_rows_selector ).hover(function(){  
+       $(this).find('td').addClass('hovered');  
+     }, function(){  
+       $(this).find('td').removeClass('hovered');  
+     });
+  }
 
+
+
+  // todo: rename to table_filter_worker or similar?
   function filter(selector, query) {  
     query =   $.trim(query); //trim white space  
     query = query.replace(/ /gi, '|'); //add OR for regex query  
@@ -40,45 +52,47 @@
       }      
     });  
   }    
-  
-  $(document).ready(function() {
-    $('table tr.row').hover(function(){  
-       $(this).find('td').addClass('hovered');  
-     }, function(){  
-       $(this).find('td').removeClass('hovered');  
-     });
-  
-  //default each row to visible  
-  $('table tr.row').addClass('visible');  
 
-  $('#filter').keyup( function(event) {  
+  function table_filter( filter_id, table_rows_selector )
+  {
+    //default each row to visible  
+    $( table_rows_selector ).addClass('visible');  
+
+    $( filter_id ).keyup( function(event) {  
     //if esc is pressed or nothing is entered  
     if( event.keyCode == 27 || $(this).val() == '' ) {  
       //if esc is pressed we want to clear the value of search box  
       $(this).val('');  
       //we want each row to be visible because if nothing  
       //is entered then all rows are matched.  
-      $('table tr.row').removeClass('visible').show().addClass('visible');  
+      $( table_rows_selector ).removeClass('visible').show().addClass('visible');  
     }  
     //if there is text, lets filter  
     else {  
-      filter('table tr.row', $(this).val());  
+      filter( table_rows_selector, $(this).val());  
     }    
-  });
+    });
+  }
   
-  
-   $('thead tr.sortable td').each( function( columnIndex ) {
+  function table_sorter( table_id )
+  {
+    $( table_id + ' thead tr.sortable td').each( function( columnIndex ) {
     if( $(this).is( '.sortable' ) )
     {
-
       // console.log( "sortable["+columnIndex+"]" );      
-      
+
       $(this).click( function() {
       
          // console.log( "onclick sortable["+columnIndex+"]");
          
          var findSortKey = function( $cell ) {
-           return $cell.find( 'input[type=text]' ).val();
+
+           // todo/fix: use data-type property or similar!!           
+           var $input = $cell.find( 'input[type=text]' );
+           if( $input.length == 1 )
+             return $input.val();
+           else
+             return $cell.text();
          }
       
          var sortDirection = $(this).is( '.sorted-asc' ) ? -1 : 1;
@@ -100,16 +114,13 @@
           });
         
         $.each( $rows, function( index, row ) {
-          $( 'tbody' ).append( row );
+          $( table_id + ' tbody' ).append( row );
           row.sortKey = null;
         });
         
-        $('thead tr.sortable td').removeClass( 'sorted-asc sorted-desc' );
+        $( table_id + ' thead tr.sortable td').removeClass( 'sorted-asc sorted-desc' );
         sortDirection == 1 ? $(this).addClass( 'sorted-asc' ) : $(this).addClass( 'sorted-desc' );
-        
    }); 
     }
    });
-   
-  
-  }); // document.ready
+  }
