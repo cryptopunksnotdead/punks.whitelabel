@@ -6,6 +6,13 @@
     use data-td-input: true|false (default is false)
     
     use data-cell|table|??
+    
+    add support for date
+    add icons for up and down
+    
+    
+    ***** uses stable merge sort or use pos hack on equal
+    *****  add to docu
    
 */
   
@@ -21,6 +28,9 @@
 
 
   // todo: rename to table_filter_worker or similar?
+  
+  // todoL use keyfunc like in table_sorter  
+  
   function filter(selector, query) {  
     query =   $.trim(query); //trim white space  
     query = query.replace(/ /gi, '|'); //add OR for regex query  
@@ -76,7 +86,27 @@
   
   function table_sorter( table_id )
   {
+    var sortFuncs = {
+          "int"    : function(left,right) { return left - right; },
+          "float"  : function(left,right) { return left - right; },
+          "string" : function(left,right) { if (left<right) return -1; if (left>right) return 1; return 0;}
+        };    
+
+    // NB: use replace( /,/g, '' ) for numbers (remove , lets you use 123,444,444 instead of 123444444 )
+    // convert from text to data type
+    var convFuncs = {
+          "int"    : function(text) { return parseInt( text.replace( /,/g, ''), 10); },
+          "float"  : function(text) { return parseFloat( text.replace( /,/g, '')); },
+          "string" : function(text) { return text; }
+      };    
+    
+    var keyFuncs = {
+          "input" : function( $cell ) { return $cell.find('input[type=text]').val(); },
+          "text":   function( $cell ) { return $cell.text(); }
+        };
+
     $( table_id + ' thead tr.sortable td').each( function( columnIndex ) {
+
     if( $(this).is( '.sortable' ) )
     {
       // console.log( "sortable["+columnIndex+"]" );      
@@ -84,16 +114,22 @@
       $(this).click( function() {
       
          // console.log( "onclick sortable["+columnIndex+"]");
-         
-         var findSortKey = function( $cell ) {
+    
+         var keyType = $(this).data( 'input' );
+         if( keyType === true )
+           keyType = 'input';
+         else
+           keyType = 'text';
 
-           // todo/fix: use data-type property or similar!!           
-           var $input = $cell.find( 'input[type=text]' );
-           if( $input.length == 1 )
-             return $input.val();
-           else
-             return $cell.text();
-         }
+         var sortType = $(this).data( 'type' );
+         if( sortType === undefined )
+           sortType = 'string';
+    
+         // console.log( "keytype: " + keyType + ", sortType: " + sortType ); 
+    
+         var keyFunc  = keyFuncs[ keyType ];
+         var convFunc = convFuncs[ sortType ];
+         var sortFunc = sortFuncs[ sortType ];      
       
          var sortDirection = $(this).is( '.sorted-asc' ) ? -1 : 1;
       
@@ -103,19 +139,28 @@
          // console.log( $rows );
 
          $.each( $rows, function( index, row ) {
-            row.sortKey = findSortKey( $(row).children( 'td' ).eq( columnIndex ) );
+            row.sortKey = convFunc( keyFunc( $(row).children( 'td' ).eq( columnIndex ) ));
+            row.sortPos = index;   // NB: stable sort hack, part i - on equal use sortPos to keep stable sort with unstable sort
             // console.log( "["+index+"]" + row.sortKey );
          });
          
         $rows.sort( function( left, right ) {
-          if( left.sortKey < right.sortKey ) return -sortDirection;
-          if( left.sortKey > right.sortKey ) return sortDirection;
-          return 0;
-          });
+          var result = sortFunc( left.sortKey, right.sortKey );
+
+          if( sortDirection == -1 )
+            result = -result;
+          
+          // NB: stable sort hack, part ii
+          if( result == 0 )
+            result = left.sortPos - right.sortPos;
+            
+          return result;
+        });
         
         $.each( $rows, function( index, row ) {
           $( table_id + ' tbody' ).append( row );
-          row.sortKey = null;
+          // row.sortKey = null;
+          // row.sortPos = null;
         });
         
         $( table_id + ' thead tr.sortable td').removeClass( 'sorted-asc sorted-desc' );
