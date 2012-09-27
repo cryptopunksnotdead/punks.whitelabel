@@ -5,7 +5,7 @@
      <title>Test jquery.table.js - Table Sorter, Filter & More</title>
      <!-- use CDN (content delivery network); replace w/ local version if needed -->
      <script src='http://code.jquery.com/jquery.min.js'></script> 
-     <script src='jquery.table.js'></script>
+     <script src='../jquery.table.js'></script>
    
 <script>
    
@@ -26,7 +26,10 @@
    
 </script>   
      
-     <style>
+<style>
+  th {
+    background-color: silver;
+  }         
          
   /* add hover effect for table rows */  
   td.hovered {  
@@ -37,13 +40,26 @@
     
   th.sortable {
     cursor: pointer;
+    padding-right: 23px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-image: url('i/bg.gif');
   }
       
   th.sortable.sorted-asc,
   th.sortable.sorted-desc  {
     color: white;
-    background-color: black;
+    background-color: grey;
   }
+  
+  th.sortable.sorted-asc {
+    background-image: url('i/asc.gif');
+  }
+
+  th.sortable.sorted-desc {
+    background-image: url('i/desc.gif');
+  }
+  
 
   th.sortable:hover {
     color: black;
@@ -65,7 +81,7 @@
     
 <table id="table1">
    <thead>
-     <tr style='background-color: silver;'>
+     <tr>
         <th data-type='int'>number (int)</th>
         <th data-type='float'>number (float)</th>
         <th>string</th>
@@ -89,7 +105,7 @@
     
 <table id="table2">
    <thead>
-     <tr style='background-color: silver;'>
+     <tr>
         <th id='t1' data-input='true' data-type='int'>number (int)</th>
         <th id='t2' data-input='true' data-type='float'>number (float)</th>
         <th id='t3' data-input='true'>string</th>
@@ -130,7 +146,7 @@
     
 <table id='cities'>
    <thead>
-     <tr style='background-color: silver;'>
+     <tr>
         <th data-type='int'>Rank</th>
         <th>City</th>
         <th>Country</th>

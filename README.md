@@ -16,10 +16,42 @@ That's it.
 
 ### Sortable
 
-Using `data-sort='false'` lets you mark header columns as not sortable. All sortable header
-columns get marked with the `.sortable` style class. Example:
+Using `data-sort='false'` lets you mark header columns as not sortable. Example:
 
     <th data-sort='false'>do not sort</th>
+
+Note: All sortable header columns get marked with the `.sortable` style class.
+If a column got sorted ascending it gets marked with the `.sort-asc` style class
+and if descending it gets marked with `.sort-desc` to let you add styles. Example:
+
+    th.sortable {
+      cursor: pointer;
+      padding-right: 23px;
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-image: url('i/bg.gif');
+    }
+    
+    th.sortable.sorted-asc,
+    th.sortable.sorted-desc  {
+      color: white;
+      background-color: grey;
+    }
+    
+    th.sortable.sorted-asc {
+      background-image: url('i/asc.gif');
+    }
+    
+    th.sortable.sorted-desc {
+      background-image: url('i/desc.gif');
+    }
+    
+    th.sortable:hover {
+      color: black;
+      background-color: yellow; 
+      text-decoration: underline;
+    }
+
 
 ### Filterable
 
