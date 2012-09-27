@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
    <head>
      <meta charset="utf-8">   
@@ -10,17 +11,16 @@
    
   $(document).ready(function() {
   
-      table_hovered( 'table tr.row' );  
-
-      table_filter( '#filter1', '#table1 tr.row' );
-  
-      table_filter( '#filter2', '#table2 tr.row' );
-      
       table_sorter( '#table1' );
+      table_hovered( '#table1' );  
+      table_filter( '#filter1', '#table1' );
 
       table_sorter( '#table2' );
+      table_hovered( '#table2' );  
+      table_filter( '#filter2', '#table2' );
 
       table_sorter( '#cities' );
+      table_hovered( '#cities' );  
   
   }); // document.ready   
    
@@ -33,27 +33,24 @@
      background-color: aqua; 
   }
     
-  td.sortable {
+
+    
+  th.sortable {
     cursor: pointer;
   }
-  
-  td.sortable:hover {
+      
+  th.sortable.sorted-asc,
+  th.sortable.sorted-desc  {
+    color: white;
+    background-color: black;
+  }
+
+  th.sortable:hover {
+    color: black;
     background-color: yellow; 
     text-decoration: underline;    
   }
-  
-  td.sorted-asc,
-  td.sorted-desc 
-  {
-    background-color: black;
-    color: white;
-  }
 
-  td.sortable.sorted-asc:hover,
-  td.sortable.sorted-desc:hover
-  {
-    color: black;
-  }
         
      </style>
    </head>
@@ -68,18 +65,18 @@
     
 <table id="table1">
    <thead>
-     <tr class='sortable' style='background-color: silver;'>
-        <td class='sortable' data-type='int'>number (int)</td>
-        <td class='sortable' data-type='float'>number (float)</td>
-        <td class='sortable'>string</td>
-        <td class='sortable'>date</td>
-        <td>do not sort</td>
+     <tr style='background-color: silver;'>
+        <th data-type='int'>number (int)</th>
+        <th data-type='float'>number (float)</th>
+        <th>string</th>
+        <th>date</th>
+        <th data-sort='false'>do not sort</th>
      </tr>
    </thead>
    <tbody>
-     <tr class='row sortable'><td>2</td><td>-.18</td><td>apple</td><td>Mar 15, 1986</td></tr>
-     <tr class='row sortable'><td>15</td><td>88.5</td><td>banana</td><td>Aug 07, 2004</td></tr>
-     <tr class='row sortable'><td>-53</td><td>-858</td><td>orange</td><td>Feb 27, 2086</td></tr>
+     <tr><td>2</td><td>-.18</td><td>apple</td><td>Mar 15, 1986</td></tr>
+     <tr><td>15</td><td>88.5</td><td>banana</td><td>Aug 07, 2004</td></tr>
+     <tr><td>-53</td><td>-858</td><td>orange</td><td>Feb 27, 2086</td></tr>
    </tbody>
 </table>    
     
@@ -92,28 +89,28 @@
     
 <table id="table2">
    <thead>
-     <tr class='sortable' style='background-color: silver;'>
-        <td id='t1' class='sortable' data-input='true' data-type='int'>number (int)</td>
-        <td id='t2' class='sortable' data-input='true' data-type='float'>number (float)</td>
-        <td id='t3' class='sortable' data-input='true'>string</td>
-        <td id='t4' class='sortable' data-input='true'>date</td>
-        <td id='t5' >do not sort</td>
+     <tr style='background-color: silver;'>
+        <th id='t1' data-input='true' data-type='int'>number (int)</th>
+        <th id='t2' data-input='true' data-type='float'>number (float)</th>
+        <th id='t3' data-input='true'>string</th>
+        <th id='t4' data-input='true'>date</th>
+        <th id='t5' data-sort='false'>do not sort</th>
      </tr>
    </thead>
    <tbody>
-     <tr class='row sortable'>
+     <tr>
       <td><input type='text' value='2'></td>
       <td><input type='text' value='-.18'></td>
       <td><input type='text' value='apple'></td>
       <td><input type='text' value='Mar 15, 1986'></td>
      </tr>
-     <tr class='row sortable'>
+     <tr>
       <td><input type='text' value='15'></td>
       <td><input type='text' value='88.5'></td>
       <td><input type='text' value='banana'></td>
       <td><input type='text' value='Aug 07, 2004'></td>
      </tr>
-     <tr class='row sortable'>
+     <tr>
       <td><input type='text' value='-53'></td>
       <td><input type='text' value='-858'></td>
       <td><input type='text' value='orange'></td>
@@ -121,7 +118,7 @@
      </tr>
    </tbody>
    <tfoot>
-     <tr class='row'><td><input type='text'></td>
+     <tr><td><input type='text'></td>
          <td><input type='text'></td>
          <td><input type='text'></td>
          <td><input type='text'></td>
@@ -133,73 +130,73 @@
     
 <table id='cities'>
    <thead>
-     <tr class='sortable' style='background-color: silver;'>
-        <td class='sortable' data-type='int'>Rank</td>
-        <td class='sortable'>City</td>
-        <td class='sortable'>Country</td>
-        <td class='sortable' data-type='int'>Population</td>
-        <td class='sortable' data-type='int'>Year</td>
+     <tr style='background-color: silver;'>
+        <th data-type='int'>Rank</th>
+        <th>City</th>
+        <th>Country</th>
+        <th data-type='int'>Population</th>
+        <th data-type='int'>Year</th>
      </tr>
    </thead>
    <tbody>
-<tr class='row sortable'>
+<tr>
   <td>1</td><td>São Paulo</td><td>Brazil</td><td>11,316,149</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>2</td><td>Mexico City</td><td>Mexico</td><td>8,851,080</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>3</td><td>New York City</td><td>United States</td><td>8,175,133</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>4</td><td>Lima</td><td>Peru</td><td>7,605,742</td><td>2007</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>5</td><td>Bogotá</td><td>Colombia</td><td>7,467,804</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>6</td><td>Rio de Janeiro</td><td>Brazil</td><td>6,355,949</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>7</td><td>Santiago</td><td>Chile</td><td>5,040,028</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>8</td><td>Los Angeles</td><td>United States</td><td>3,792,621</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>9</td><td>Buenos Aires</td><td>Argentina</td><td>2,891,082</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>10</td><td>Chicago</td><td>United States</td><td>2,695,598</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>11</td><td>Salvador</td><td>Brazil</td><td>2,693,605</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>12</td><td>Toronto</td><td>Canada</td><td>2,615,060</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>13</td><td>Brasília</td><td>Brazil</td><td>2,609,997</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>14</td><td>Fortaleza</td><td>Brazil</td><td>2,476,589</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>15</td><td>Belo Horizonte</td><td>Brazil</td><td>2,385,639</td><td>2011</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>16</td><td>Guayaquil</td><td>Ecuador</td><td>2,366,902</td><td>2008</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>17</td><td>Medellín</td><td>Colombia</td><td>2,343,049</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>18</td><td>Santiago de Cali</td><td>Colombia</td><td>2,219,714</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>19</td><td>Santo Domingo</td><td>Dominican Republic</td><td>2,169,300</td><td>2010</td>
      </tr>
-<tr class='row sortable'>
+<tr>
   <td>20</td><td>Havana</td><td>Cuba</td><td>2,135,498</td><td>2010</td>
      </tr>
    </tbody>
