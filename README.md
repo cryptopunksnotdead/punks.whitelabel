@@ -11,6 +11,104 @@ Include the `jquery.table.js` script after the jquery library. Example:
     
 That's it.
 
+## Notes
+
+
+### Sortable
+
+Using `data-sort='false'` lets you mark header columns as not sortable. All sortable header
+columns get marked with the `.sortable` style class. Example:
+
+    <th data-sort='false'>do not sort</th>
+
+### Filterable
+
+Using `data-filter='false'` lets you mark columns as not filterable. Example:
+
+    <th data-filter='false'>do not filter</th>
+
+Note: Table rows in `tfoot` will not get filtered. (Lets you add an empty new table row, for example.)
+
+### Data Types (Cell Text to Data Type)
+
+Using `data-type` lets you specify the data type for sorting. Possible values include `string|int|float`.
+Example:
+
+    <th data-type='int'>number (int)</th>
+    <th data-type='float'>number (float)</th>
+
+### Cell Types (Cell to Cell Text)
+
+Using `data-input='true'` lets you use the value from an input text control
+(default is using the text from the cell). Example:
+
+    <th data-input='true'>string</th>
+
+
+## Example - All toghether now
+
+### Read-Only
+
+    <table>
+       <thead>
+         <tr>
+            <th data-type='int'>number (int)</th>
+            <th data-type='float'>number (float)</th>
+            <th>string</th>
+            <th>date</th>
+            <th data-sort='false'>do not sort</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr><td>2</td><td>-.18</td><td>apple</td><td>Mar 15, 1986</td></tr>
+         <tr><td>15</td><td>88.5</td><td>banana</td><td>Aug 07, 2004</td></tr>
+         <tr><td>-53</td><td>-858</td><td>orange</td><td>Feb 27, 2086</td></tr>
+       </tbody>
+    </table>
+
+
+### Editable
+
+    <table>
+       <thead>
+         <tr>
+            <th data-input='true' data-type='int'>number (int)</th>
+            <th data-input='true' data-type='float'>number (float)</th>
+            <th data-input='true'>string</th>
+            <th data-input='true'>date</th>
+            <th data-sort='false'>do not sort</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+          <td><input type='text' value='2'></td>
+          <td><input type='text' value='-.18'></td>
+          <td><input type='text' value='apple'></td>
+          <td><input type='text' value='Mar 15, 1986'></td>
+         </tr>
+         <tr>
+          <td><input type='text' value='15'></td>
+          <td><input type='text' value='88.5'></td>
+          <td><input type='text' value='banana'></td>
+          <td><input type='text' value='Aug 07, 2004'></td>
+         </tr>
+         <tr>
+          <td><input type='text' value='-53'></td>
+          <td><input type='text' value='-858'></td>
+          <td><input type='text' value='orange'></td>
+          <td><input type='text' value='Feb 27, 2086'></td>
+         </tr>
+       </tbody>
+       <tfoot>
+         <tr><td><input type='text'></td>
+             <td><input type='text'></td>
+             <td><input type='text'></td>
+             <td><input type='text'></td>
+         </tr>
+       </tfoot>
+    </table>
+
+
 ## License
 
 The scripts are dedicated to the public domain. Use it as you please with no restrictions whatsoever.
