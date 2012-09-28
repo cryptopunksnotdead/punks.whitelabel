@@ -201,24 +201,27 @@
   }
 
   
-  function table_expander( table_id, group_class )
+  function table_expander( table_sel, group_class )
   {
-    var $table = $( table_id );
     var up_class   = 'expander-hide';
     var down_class = 'expander-show';
-    
-    var $groups = $table.find( "tr."+group_class );    
 
-    // NB: by default rows started out shown/expanded    
-    $groups.addClass( up_class );    
+    $( table_sel ).each( function() {
+                        
+      var $table  = $( this );    
+      var $groups = $table.find( "tr."+group_class );    
 
-    // NB: add last style class to last td for easy styling with icons
-    //  ie8 doesn't support :last-child in css
-    $groups.find( "td:last" ).addClass( 'last' );    
-    $groups.find( "td:first" ).addClass( 'first' );    
+      // NB: by default rows started out shown/expanded    
+      $groups.addClass( up_class );    
+
+      // NB: add last style class to last td for easy styling with icons
+      //  ie8 doesn't support :last-child in css
+      $groups.find( "td:last" ).addClass( 'last' );    
+      $groups.find( "td:first" ).addClass( 'first' );    
     
-    $groups.click( function() {
-      $(this).nextUntil("tr."+group_class ).toggle();
-      $(this).toggleClass( up_class + " " + down_class );  // adds first; removes second class
-    });    
+      $groups.click( function() {
+        $(this).nextUntil("tr."+group_class ).toggle();
+        $(this).toggleClass( up_class + " " + down_class );  // adds first; removes second class
+      });    
+    }); // each table
   }   
