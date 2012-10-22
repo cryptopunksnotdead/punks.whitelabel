@@ -99,7 +99,7 @@
   }
 
   
-  function table_sorter( table_id )
+  function table_sorter( table_id, opts )
   {
     var sortFuncs = {
           "int"    : function(left,right) { return left - right; },
@@ -115,7 +115,16 @@
           "string" : function(text) { return text; }
       };    
         
+
+    if( $.type( opts ) === 'undefined' )
+      opts = {};
+        
+    var groupClass = opts.groupClass;    
+    var hasGroupClass =  $.type( groupClass ) === 'string';
+
+        
     var $table = $( table_id );
+    var $tbody = $table.find( 'tbody' );
     
     // NB: by default use :last (if more than one table header row; only use the last one)
     $table.find( 'thead tr:last th' ).each( function( columnIndex ) {
@@ -153,15 +162,27 @@
          // console.log( "onclick sortable["+columnIndex+"]");
       
          var sortDirection = $(this).is( '.sorted-asc' ) ? -1 : 1;
-      
-         var $rows = $table.find( 'tbody tr' );
-         
+  
+         var $rows;  
+  
+         if( hasGroupClass  )
+          $rows = $tbody.find( 'tr.'+groupClass );
+         else
+          $rows = $tbody.find( 'tr' );
+           
          // console.log( $rows );
 
          $rows.each( function( index, row ) {
             row.sortKey = convFunc( keyFunc( $(row).children( 'td' ).eq( columnIndex ) ));
             row.sortPos = index;   // NB: stable sort hack, part i - on equal use sortPos to keep stable sort with unstable sort
             // console.log( "["+index+"]" + row.sortKey );
+            
+            // before add subrows
+            if( hasGroupClass ) {
+              // console.log( "before subrows" );
+              row.$subrows = $(row).nextUntil( 'tr.'+groupClass );
+              // console.log( "after subrows " + row.$subrows.length );
+            }            
          });
          
         $rows.sort( function( left, right ) {
@@ -178,9 +199,14 @@
         });
         
         $rows.each( function( index, row ) {
-          $table.find( 'tbody' ).append( row );
+          $tbody.append( row );
           // row.sortKey = null;
           // row.sortPos = null;
+
+          // add possible subrows
+          if( hasGroupClass )
+            $tbody.append( row.$subrows );
+
         });
         
         $table.find( 'thead tr:last th').removeClass( 'sorted-asc sorted-desc' );
