@@ -19,7 +19,7 @@
       table_hovered( '#table2' );  
       table_filter( '#filter2', '#table2' );
 
-      table_sorter( '#cities' );
+      table_sorter( '#cities' ).sort(3).sort(2);   /* on ready sort first by pop (3) and than country (2); col index is zero-based */
       table_hovered( '#cities' );  
   
   }); // document.ready   

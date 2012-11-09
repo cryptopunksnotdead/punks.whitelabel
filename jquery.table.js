@@ -98,9 +98,11 @@
     });
   }
 
-  
-  function table_sorter( table_id, opts )
-  {
+
+  var table_sorter_new = function( table_id, opts ) {
+    
+    // use module pattern (see JavaScript - The Good Parts)
+
     var sortFuncs = {
           "int"    : function(left,right) { return left - right; },
           "float"  : function(left,right) { return left - right; },
@@ -114,68 +116,54 @@
           "float"  : function(text) { return parseFloat( text.replace( /,/g, '')); },
           "string" : function(text) { return text; }
       };    
-        
 
-    if( $.type( opts ) === 'undefined' )
-      opts = {};
-        
-    var groupClass = opts.groupClass;    
-    var hasGroupClass =  $.type( groupClass ) === 'string';
-
-        
-    var $table = $( table_id );
-    var $tbody = $table.find( 'tbody' );
+      
+    var groupClass,
+        hasGroupClass;        
     
-    // NB: by default use :last (if more than one table header row; only use the last one)
-    $table.find( 'thead tr:last th' ).each( function( columnIndex ) {
+    var $table,
+        $tbody,
+        $rows;  
 
-    // NB: lets you use data-sort=false to make column NOT sortable
-    var sortable = $(this).data( 'sort' );
-    if( sortable === undefined )
-      sortable = true;
+  function _debug( msg )
+  {
+    // console.log( "[debug] " + msg ); 
+  }
     
-    if( sortable )
-    {
-      // console.log( "sortable["+columnIndex+"]" );      
-
-      // NB: add class .sortable for easy styling
-      $(this).addClass( 'sortable' );     
-   
-      var keyType = $(this).data( 'input' );
+  function _sort_col( $col, colIndex )
+  {
+     _debug( "call _sort_col("+colIndex+")" );
+     
+      var keyType = $col.data( 'input' );
       if( keyType === true )
          keyType = 'input';
       else
          keyType = 'text';
 
-      var sortType = $(this).data( 'type' );
+      var sortType = $col.data( 'type' );
       if( sortType === undefined )
          sortType = 'string';
     
-      // console.log( "keytype: " + keyType + ", sortType: " + sortType ); 
+      _debug( "keytype: " + keyType + ", sortType: " + sortType ); 
     
       var keyFunc  = keyFuncs[ keyType ];
       var convFunc = convFuncs[ sortType ];
       var sortFunc = sortFuncs[ sortType ];      
-      
-      $(this).click( function() {
-      
-         // console.log( "onclick sortable["+columnIndex+"]");
-      
-         var sortDirection = $(this).is( '.sorted-asc' ) ? -1 : 1;
-  
-         var $rows;  
-  
-         if( hasGroupClass  )
-          $rows = $tbody.find( 'tr.'+groupClass );
-         else
-          $rows = $tbody.find( 'tr' );
-           
-         // console.log( $rows );
 
-         $rows.each( function( index, row ) {
-            row.sortKey = convFunc( keyFunc( $(row).children( 'td' ).eq( columnIndex ) ));
+      
+      /////////////////////////////
+      // sort code starts here
+      
+      var sortDirection = $col.is( '.sorted-asc' ) ? -1 : 1;
+      
+      _debug( "sortDirection: " + sortDirection );
+  
+  
+      $rows.each( function( index, row ) {
+            row.sortKey = convFunc( keyFunc( $(row).children( 'td' ).eq( colIndex ) ));
             row.sortPos = index;   // NB: stable sort hack, part i - on equal use sortPos to keep stable sort with unstable sort
-            // console.log( "["+index+"]" + row.sortKey );
+
+            // _debug( "["+index+"] => " + row.sortKey );
             
             // before add subrows
             if( hasGroupClass ) {
@@ -183,9 +171,9 @@
               row.$subrows = $(row).nextUntil( 'tr.'+groupClass );
               // console.log( "after subrows " + row.$subrows.length );
             }            
-         });
+      }); // each rows
          
-        $rows.sort( function( left, right ) {
+      $rows.sort( function( left, right ) {
           var result = sortFunc( left.sortKey, right.sortKey );
 
           if( sortDirection == -1 )
@@ -196,24 +184,99 @@
             result = left.sortPos - right.sortPos;
             
           return result;
-        });
+      }); // sort
         
-        $rows.each( function( index, row ) {
-          $tbody.append( row );
+      $rows.each( function( index, row ) {
+        $tbody.append( row );
           // row.sortKey = null;
           // row.sortPos = null;
 
-          // add possible subrows
-          if( hasGroupClass )
-            $tbody.append( row.$subrows );
+        // add possible subrows
+        if( hasGroupClass )
+          $tbody.append( row.$subrows );
 
-        });
+       });
         
-        $table.find( 'thead tr:last th').removeClass( 'sorted-asc sorted-desc' );
-        sortDirection == 1 ? $(this).addClass( 'sorted-asc' ) : $(this).addClass( 'sorted-desc' );
-   }); 
-    }
-   });
+       $table.find( 'thead tr:last th').removeClass( 'sorted-asc sorted-desc' );
+       (sortDirection == 1) ? $col.addClass( 'sorted-asc' ) : $col.addClass( 'sorted-desc' );
+        
+  } // function _sort_col
+  
+  function _init( table_id, opts )
+  {
+    if( $.type( opts ) === 'undefined' )
+      opts = {};
+        
+    groupClass = opts.groupClass;    
+    hasGroupClass =  $.type( groupClass ) === 'string';
+    
+    $table = $( table_id );
+    $tbody = $table.find( 'tbody' );
+ 
+    if( hasGroupClass  )
+      $rows = $tbody.find( 'tr.'+groupClass );
+    else
+      $rows = $tbody.find( 'tr' );
+           
+    // console.log( $rows );
+ 
+    
+    // NB: by default use :last (if more than one table header row; only use the last one)
+    $table.find( 'thead tr:last th' ).each( function( colIndex ) {
+
+       // NB: lets you use data-sort=false to make column NOT sortable
+       var $col = $(this);       
+       var sortable = $col.data( 'sort' );
+       if( sortable === undefined )
+         sortable = true;
+    
+       if( sortable )
+       {
+          // console.log( "sortable["+columnIndex+"]" );      
+          // NB: add class .sortable for easy styling
+          $col.addClass( 'sortable' );     
+          $col.click( function() {
+             _sort_col( $col, colIndex );
+          }); 
+       }
+    });  // each th
+  } // function _init
+
+  
+  _init( table_id, opts );  
+
+  
+    return {
+      sort: function( colIndex ) {
+
+         _debug( "call sort("+ colIndex +")" );        
+        
+         var $col = $table.find( 'thead tr:last th' ).eq( colIndex );
+         
+         // NB: lets you use data-sort=false to make column NOT sortable
+         var sortable = $col.data( 'sort' );
+         if( sortable === undefined )
+           sortable = true;
+    
+         if( sortable )
+           _sort_col( $col, colIndex );
+           
+           return this;
+      },
+      zebra: function() {
+        return this;
+      },
+      another_method: function() {
+        return this;
+      }
+    };  
+  };
+
+  function table_sorter( table_id, opts )
+  {
+    var sorter = table_sorter_new( table_id, opts );
+    // sorter.sort( 2 );
+    return sorter;
   }
 
   
