@@ -142,10 +142,17 @@
             var re = /(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})/;
             var match = re.exec( text );            
             if( match ) {
-              text = match[3]+"-"+match[2]+"-"+match[1];
+              text = match[3]+"-"+match[2]+"-"+match[1];              
               _debug( "convDate match >" + text + "<" );
+ 
+              year  = parseInt( match[3], 10 );
+              month = parseInt( match[2], 10 )-1;  // NB:  beginning with 0 for January to 11 for December.
+              day   = parseInt( match[1], 10 );
+
+              text = year+"-"+month+"-"+day;
+              _debug( "convDate date ints>" + text + "<" );              
               // todo: check what happens if date is invalid?? do we get an exception? invalid object?
-              var f = parseFloat( new Date( text ).getTime() );
+              var f = parseFloat( new Date( year, month, day ).getTime() );
               if(isNaN(f))
                  f = 0;
             }
