@@ -103,20 +103,56 @@
     
     // use module pattern (see JavaScript - The Good Parts)
 
+    function _debug( msg )
+    {
+      // console.log( "[debug] " + msg ); 
+    }
+    
+    
     var sortFuncs = {
           "int"    : function(left,right) { return left - right; },
           "float"  : function(left,right) { return left - right; },
-          "string" : function(left,right) { if (left<right) return -1; if (left>right) return 1; return 0;}
+          "string" : function(left,right) { if (left<right) return -1; if (left>right) return 1; return 0;},
+          "date"   : function(left,right) { return left - right; }
         };    
 
     // NB: use replace( /,/g, '' ) for numbers (remove , lets you use 123,444,444 instead of 123444444 )
     // convert from text to data type
     var convFuncs = {
-          "int"    : function(text) { return parseInt( text.replace( /,/g, ''), 10); },
-          "float"  : function(text) { return parseFloat( text.replace( /,/g, '')); },
-          "string" : function(text) { return text; }
+          "int"    : function(text) {
+            // todo: check what function returns if int is invalid? is it NaN?
+            var i = parseInt( text.replace( /,/g, ''), 10 );
+            return (isNaN(i)) ? 0 : i;
+            },
+          "float"  : function(text) {
+            // todo: check what function returns if int is invalid? is it NaN?
+            var f = parseFloat( text.replace( /,/g, '') );
+            return (isNaN(f)) ? 0 : f;
+            },
+          "string" : function(text) {
+            // convert to lower case (thus, ignore case in sort)
+            return text.toLowerCase();
+            },
+          "date"   : function(text) {
+            _debug( "convDate before >" + text +"<" );
+            text = text.replace( /\-/g, '/' );
+            var f = 0;
+            // current date format DD{1,2}/MM{1,2}/YYYY supported:
+            // e.g.   12.02.1999 or 12/2/1999 or 1-12-2011
+            var re = /(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})/;
+            var match = re.exec( text );            
+            if( match ) {
+              text = match[3]+"-"+match[2]+"-"+match[1];
+              _debug( "convDate match >" + text + "<" );
+              // todo: check what happens if date is invalid?? do we get an exception? invalid object?
+              var f = parseFloat( new Date( text ).getTime() );
+              if(isNaN(f))
+                 f = 0;
+            }
+            _debug( "convDate after >" + f +"<" );
+            return f;            
+        }
       };    
-
       
     var groupClass,
         hasGroupClass;        
@@ -124,11 +160,6 @@
     var $table,
         $tbody,
         $rows;  
-
-  function _debug( msg )
-  {
-    // console.log( "[debug] " + msg ); 
-  }
     
   function _sort_col( $col, colIndex )
   {
