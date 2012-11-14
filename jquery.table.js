@@ -1,103 +1,3 @@
-/* todo:
-   make input[type=text] configurable!!!!
-   
-  
-    use data-td-type: number|string|date
-    use data-td-input: true|false (default is false)
-    
-    use data-cell|table|??
-    
-    add support for date
-    add icons for up and down
-    
-    
-    ***** uses stable merge sort or use pos hack on equal
-    *****  add to docu
-   
-*/
-
-
-    var keyFuncs = {
-          "input" : function( $cell ) { return $cell.find('input[type=text]').val(); },
-          "text":   function( $cell ) { return $cell.text(); },
-          "void":   function( $cell ) { return ''; }
-        };
-  
-  
-  
-  function table_filter_worker( $rows, query, keyFuncMap ) {  
-    query =   $.trim(query); //trim white space  
-    query = query.replace(/ /gi, '|'); //add OR for regex query  
-
-    var regex = new RegExp(query, 'i');
-    
-    $rows.each( function() {      
-      var text = "| ";
-      $(this).find( 'td' ).each( function( index ) {
-        text +=  keyFuncMap[index]( $(this) ) + " |";
-      } );      
-      
-      // console.log( "[debug] text: " + text );
-      
-      if( text.search( regex ) < 0 ) {  
-          $(this).hide().removeClass('visible')  
-      } else {  
-          $(this).show().addClass('visible');  
-      }
-    });  // each row
-  }    
-
-  function table_filter( filter_id, table_id )
-  {    
-    var $table = $( table_id );
-
-    // build keyFuncMap for/from columns
-    var keyFuncMap = [];
-    
-    // NB: by default use :last (if more than one table header row; only use the last one)
-    $table.find( 'thead tr:last th' ).each( function( columnIndex ) {
-
-      // NB: lets you use data-filter=false to make column NOT filterable
-     var filterable = $(this).data( 'filter' );
-     if( filterable === undefined )
-       filterable = true;
-    
-     if( filterable )
-     {
-      var keyType = $(this).data( 'input' );
-      if( keyType === true )
-        keyType = 'input';
-      else
-        keyType = 'text';
-
-        keyFuncMap[ columnIndex ] = keyFuncs[ keyType ];
-     }
-     else
-     {
-        keyFuncMap[ columnIndex ] = keyFuncs['void']; 
-     }
-    }); // each th
-
-
-    var $rows = $table.find( 'tbody tr,tfoot tr' );    
-    $rows.addClass('visible');   //default each row to visible
-    
-    $( filter_id ).keyup( function(event) {  
-    //if esc is pressed or nothing is entered  
-    if( event.keyCode == 27 || $(this).val() == '' ) {  
-      //if esc is pressed we want to clear the value of search box  
-      $(this).val('');  
-      //we want each row to be visible because if nothing  
-      //is entered then all rows are matched.  
-      $rows.removeClass('visible').show().addClass('visible');  
-    }  
-    //if there is text, lets filter  
-    else {
-      table_filter_worker( $rows, $(this).val(), keyFuncMap );  
-    }    
-    });
-  }
-
 
   var table_sorter_new = function( table_id, opts ) {
     
@@ -108,6 +8,10 @@
       // console.log( "[debug] " + msg ); 
     }
     
+    var keyFuncs = {
+          "input" : function( $cell ) { return $cell.find('input[type=text]').val(); },
+          "text":   function( $cell ) { return $cell.text(); }
+        };
     
     var sortFuncs = {
           "int"    : function(left,right) { return left - right; },
@@ -120,12 +24,10 @@
     // convert from text to data type
     var convFuncs = {
           "int"    : function(text) {
-            // todo: check what function returns if int is invalid? is it NaN?
             var i = parseInt( text.replace( /,/g, ''), 10 );
             return (isNaN(i)) ? 0 : i;
             },
           "float"  : function(text) {
-            // todo: check what function returns if int is invalid? is it NaN?
             var f = parseFloat( text.replace( /,/g, '') );
             return (isNaN(f)) ? 0 : f;
             },
@@ -160,34 +62,123 @@
             return f;            
         }
       };    
+
+    // todo/fix:
+    // make it into a struct  colDef or similar
+    var keyFuncMap  = [];  // keyFuncMap for/from columns
+    var convFuncMap = [];
+    var sortFuncMap = [];
+    var filterableMap = [];
+    var sortableMap   = [];
       
     var groupClass,
         hasGroupClass;        
     
     var $table,
         $tbody,
-        $rows;  
+        $rows,
+        $filterRows;  // filter rows = rows + (tfoot tr, that is, rows in footer)
+
+
+  function _filter_worker( query ) {  
+    query =   $.trim(query); //trim white space  
+    query = query.replace(/ /gi, '|'); //add OR for regex query  
+
+    var regex = new RegExp(query, 'i');
+    
+    $filterRows.each( function( rowIndex, row ) {      
+      var text = "| ";
+      var $row = $(row);
+      $row.find( 'td' ).each( function( colIndex, col ) {
+        var filterable = filterableMap[colIndex];
+        if( filterable )
+          text += keyFuncMap[colIndex]( $(col) ) + " |";
+        else
+          text += " |"; 
+      });      
+      
+      // console.log( "[debug] text: " + text );
+      
+      if( text.search( regex ) < 0 ) {  
+          $row.hide().removeClass('visible')  
+      } else {  
+          $row.show().addClass('visible');  
+      }
+    });  // each row
+  }    
+
+  function _filter( filter_id )
+  {    
+    
+    $filterRows = $table.find( 'tbody tr,tfoot tr' );    
+    $filterRows.addClass('visible');   //default each row to visible
+    
+    $( filter_id ).keyup( function(event) {  
+    //if esc is pressed or nothing is entered  
+    if( event.keyCode == 27 || $(this).val() == '' ) {  
+      //if esc is pressed we want to clear the value of search box  
+      $(this).val('');  
+      //we want each row to be visible because if nothing  
+      //is entered then all rows are matched.  
+      $filterRows.removeClass('visible').show().addClass('visible');  
+    }  
+    //if there is text, lets filter  
+    else {
+      _filter_worker( $(this).val() );  
+    }    
+    });
+  }
+ 
+  function _hover()
+  {
+    $table.find( 'tbody tr,tfoot tr' ).hover( function() {  
+       $(this).find( 'td' ).addClass( 'hovered' );  
+     }, function() {  
+       $(this).find( 'td' ).removeClass( 'hovered' );  
+    });
+  }
+
+        
+  function _zebra()
+  {
+    var evenClass       = 'even';
+    var oddClass        = 'odd';
+    var otherClass      = 'child';  // used for subrows for groups (if groups used)
+    var evenOtherClass  = evenClass + '-' + otherClass;  // e.g. even-other
+    var oddOtherClass   = oddClass + '-' + otherClass;   // e.g. odd-other
+
+    $rows.each( function( index, row ) {
+      // NB: index is zero-based e.g. begins with 0
+      var $row = $(row);      
+      $row.removeClass( evenClass + ' ' + oddClass );
+      var isEven = index % 2 === 1;   // eg.  0|2|4 % 2 == 0,  1|3|5 % 2 == 1  || 0+1 = 1, 2+1 = 3, etc.
+      if( isEven )   
+        $row.addClass( evenClass );
+      else      
+        $row.addClass( oddClass );  
+        
+      // check possible subrows
+      if( hasGroupClass ) {
+        var $subrows = $row.nextUntil( 'tr.'+groupClass );        
+        $subrows.each( function( subindex, subrow ) {
+           var $subrow = $(subrow);
+           $subrow.removeClass( evenOtherClass +' ' + oddOtherClass );
+           if( isEven ) 
+             $subrow.addClass( evenOtherClass );           
+           else      
+             $subrow.addClass( oddOtherClass ); 
+        });
+      }
+    });
+  }
     
   function _sort_col( $col, colIndex )
   {
      _debug( "call _sort_col("+colIndex+")" );
-     
-      var keyType = $col.data( 'input' );
-      if( keyType === true )
-         keyType = 'input';
-      else
-         keyType = 'text';
-
-      var sortType = $col.data( 'type' );
-      if( sortType === undefined )
-         sortType = 'string';
     
-      _debug( "keytype: " + keyType + ", sortType: " + sortType ); 
-    
-      var keyFunc  = keyFuncs[ keyType ];
-      var convFunc = convFuncs[ sortType ];
-      var sortFunc = sortFuncs[ sortType ];      
-
+      var keyFunc  = keyFuncMap[ colIndex ];
+      var convFunc = convFuncMap[ colIndex ];
+      var sortFunc = sortFuncMap[ colIndex ];      
       
       /////////////////////////////
       // sort code starts here
@@ -197,11 +188,11 @@
       _debug( "sortDirection: " + sortDirection );
   
   
-      $rows.each( function( index, row ) {
+      $rows.each( function( rowIndex, row ) {
             row.sortKey = convFunc( keyFunc( $(row).children( 'td' ).eq( colIndex ) ));
-            row.sortPos = index;   // NB: stable sort hack, part i - on equal use sortPos to keep stable sort with unstable sort
+            row.sortPos = rowIndex;   // NB: stable sort hack, part i - on equal use sortPos to keep stable sort with unstable sort
 
-            // _debug( "["+index+"] => " + row.sortKey );
+            // _debug( "["+rowIndex+"] => " + row.sortKey );
             
             // before add subrows
             if( hasGroupClass ) {
@@ -224,7 +215,7 @@
           return result;
       }); // sort
         
-      $rows.each( function( index, row ) {
+      $rows.each( function( rowIndex, row ) {
         $tbody.append( row );
           // row.sortKey = null;
           // row.sortPos = null;
@@ -236,7 +227,12 @@
        });
         
        $table.find( 'thead tr:last th').removeClass( 'sorted-asc sorted-desc' );
-       (sortDirection == 1) ? $col.addClass( 'sorted-asc' ) : $col.addClass( 'sorted-desc' );
+       if( sortDirection == 1 )
+         $col.addClass( 'sorted-asc' );
+       else
+         $col.addClass( 'sorted-desc' );
+       
+       _zebra();
         
   } // function _sort_col
   
@@ -260,16 +256,39 @@
  
     
     // NB: by default use :last (if more than one table header row; only use the last one)
-    $table.find( 'thead tr:last th' ).each( function( colIndex ) {
+    $table.find( 'thead tr:last th' ).each( function( colIndex, col ) {
 
        // NB: lets you use data-sort=false to make column NOT sortable
-       var $col = $(this);       
+       var $col = $(col);       
        var sortable = $col.data( 'sort' );
        if( sortable === undefined )
          sortable = true;
-    
+
+       // NB: lets you use data-filter=false to make column NOT filterable
+       var filterable = $col.data( 'filter' );
+       if( filterable === undefined )
+         filterable = true;
+
+       filterableMap[colIndex] = filterable;
+       sortableMap[colIndex]   = sortable;
+
+       var keyType = $col.data( 'input' );
+       if( keyType === true )
+         keyType = 'input';
+       else
+         keyType = 'text';
+
+       keyFuncMap[ colIndex ] = keyFuncs[ keyType ];
+
        if( sortable )
        {
+         var sortType = $col.data( 'type' );
+         if( sortType === undefined )
+           sortType = 'string';
+           
+         convFuncMap[ colIndex ] = convFuncs[ sortType ];
+         sortFuncMap[ colIndex ] = sortFuncs[ sortType ]; 
+
           // console.log( "sortable["+columnIndex+"]" );      
           // NB: add class .sortable for easy styling
           $col.addClass( 'sortable' );     
@@ -302,6 +321,15 @@
            return this;
       },
       zebra: function() {
+        _zebra();                
+        return this;
+      },
+      hover: function() {
+        _hover();
+        return this;
+      },
+      filter: function( filter_id ) {
+        _filter( filter_id );
         return this;
       },
       another_method: function() {
@@ -315,16 +343,6 @@
     var sorter = table_sorter_new( table_id, opts );
     // sorter.sort( 2 );
     return sorter;
-  }
-
-  
-  function table_hovered( table_id )
-  {
-    $( table_id ).find( 'tbody tr,tfoot tr' ).hover( function() {  
-       $(this).find( 'td' ).addClass( 'hovered' );  
-     }, function() {  
-       $(this).find( 'td' ).removeClass( 'hovered' );  
-    });
   }
 
   

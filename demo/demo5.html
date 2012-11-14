@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+   <head>
+     <meta charset="utf-8">   
+     <title>Test jquery.table.js - Table Sorter, Filter & More</title>
+     <!-- use CDN (content delivery network); replace w/ local version if needed -->
+     <script src='http://code.jquery.com/jquery.min.js'></script> 
+     <script src='../jquery.table.js'></script>
+     
+     <link rel="stylesheet" href="style.css" >
+   
+<script>
+   
+  $(document).ready(function() {
+  
+      table_sorter( '#cities' ).zebra().hover();
+
+      table_sorter( '#countries', { groupClass: 'group' } ).zebra().hover();
+  
+  }); // document.ready   
+   
+</script>   
+     
+<style>
+
+ .odd         {  background-color: yellow;  }   /* 1,3,5,7, etc. */
+ .odd-child   {  background-color: gold; }
+ .even        {  background-color: lime; } /* 2,4,6,8, etc. */
+ .even-child {  background-color: greenyellow; }
+          
+</style>
+
+   </head>
+   <body>
+    
+
+<p>Test Zebra Helper</p>
+    
+    
+<table id='cities'>
+   <thead>
+     <tr>
+        <th data-type='int'>Rank</th>
+        <th>City</th>
+        <th>Country</th>
+        <th data-type='int'>Population</th>
+        <th data-type='int'>Year</th>
+     </tr>
+   </thead>
+   <tbody>
+<tr>
+  <td>1</td><td>São Paulo</td><td>Brazil</td><td>11,316,149</td><td>2011</td>
+     </tr>
+<tr>
+  <td>2</td><td>Mexico City</td><td>Mexico</td><td>8,851,080</td><td>2010</td>
+     </tr>
+<tr>
+  <td>3</td><td>New York City</td><td>United States</td><td>8,175,133</td><td>2010</td>
+     </tr>
+<tr>
+  <td>4</td><td>Lima</td><td>Peru</td><td>7,605,742</td><td>2007</td>
+     </tr>
+<tr>
+  <td>5</td><td>Bogotá</td><td>Colombia</td><td>7,467,804</td><td>2011</td>
+     </tr>
+<tr>
+  <td>6</td><td>Rio de Janeiro</td><td>Brazil</td><td>6,355,949</td><td>2011</td>
+     </tr>
+<tr>
+  <td>7</td><td>Santiago</td><td>Chile</td><td>5,040,028</td><td>2010</td>
+     </tr>
+<tr>
+  <td>8</td><td>Los Angeles</td><td>United States</td><td>3,792,621</td><td>2010</td>
+     </tr>
+<tr>
+  <td>9</td><td>Buenos Aires</td><td>Argentina</td><td>2,891,082</td><td>2010</td>
+     </tr>
+<tr>
+  <td>10</td><td>Chicago</td><td>United States</td><td>2,695,598</td><td>2010</td>
+     </tr>
+<tr>
+  <td>11</td><td>Salvador</td><td>Brazil</td><td>2,693,605</td><td>2011</td>
+     </tr>
+<tr>
+  <td>12</td><td>Toronto</td><td>Canada</td><td>2,615,060</td><td>2011</td>
+     </tr>
+<tr>
+  <td>13</td><td>Brasília</td><td>Brazil</td><td>2,609,997</td><td>2011</td>
+     </tr>
+<tr>
+  <td>14</td><td>Fortaleza</td><td>Brazil</td><td>2,476,589</td><td>2011</td>
+     </tr>
+<tr>
+  <td>15</td><td>Belo Horizonte</td><td>Brazil</td><td>2,385,639</td><td>2011</td>
+     </tr>
+<tr>
+  <td>16</td><td>Guayaquil</td><td>Ecuador</td><td>2,366,902</td><td>2008</td>
+     </tr>
+<tr>
+  <td>17</td><td>Medellín</td><td>Colombia</td><td>2,343,049</td><td>2010</td>
+     </tr>
+<tr>
+  <td>18</td><td>Santiago de Cali</td><td>Colombia</td><td>2,219,714</td><td>2010</td>
+     </tr>
+<tr>
+  <td>19</td><td>Santo Domingo</td><td>Dominican Republic</td><td>2,169,300</td><td>2010</td>
+     </tr>
+<tr>
+  <td>20</td><td>Havana</td><td>Cuba</td><td>2,135,498</td><td>2010</td>
+     </tr>
+   </tbody>
+</table>    
+    
+    
+
+<table id='countries'>
+   <thead>
+     <tr>
+        <th data-type='int'>Rank</th>
+        <th>Country</th>
+        <th data-type='int'>Players</th>
+     </tr>
+   </thead>
+   <tbody>
+<tr class='group'>
+    <td>1</td>
+    <td>Argentina</td>
+    <td>171,000,000</td>
+</tr>    
+<tr>
+  <td></td>
+  <td>(1) Lionel Messi (FC Barcelona)</td>
+  <td>+120,000,000</td>
+</tr>
+
+<tr>
+   <td></td>
+   <td>(6) Kun Agüero (Manchester City)</td>
+   <td>51,000,000</td>
+</tr>
+
+<tr class='group'>
+    <td>2</td>
+    <td>Spain</td>
+    <td>167,000,000</td>
+</tr>    
+
+<tr>
+  <td></td>
+  <td>(3) Andrés Iniesta (FC Barcelona)</td>
+  <td>+70,000,000</td>
+</tr>
+
+<tr>
+  <td></td>
+  <td>(5) Cesc Fàbregas (FC Barcelona)</td>
+  <td>+55,000,000</td>
+</tr>
+
+<tr>
+  <td></td>
+  <td>(11) Sergio Busquets (FC Barcelona)</td>
+  <td>+42,000,000</td>
+</tr>
+
+<tr class='group'>
+    <td>3</td>
+    <td>Portugal</td>
+    <td>100,000,000</td>
+</tr>    
+
+<tr>
+  <td></td>
+  <td>(2) Cristiano Ronaldo (Real Madrid)</td>
+  <td>+100,000,000</td>
+</tr>
+
+   </tbody>
+</table>
+        
+   </body>
+</html>

@@ -6,59 +6,20 @@
      <!-- use CDN (content delivery network); replace w/ local version if needed -->
      <script src='http://code.jquery.com/jquery.min.js'></script> 
      <script src='../jquery.table.js'></script>
+
+     <link rel="stylesheet" href="style.css" >
    
 <script>
    
   $(document).ready(function() {
   
-      table_sorter( '#table1' );
-      table_hovered( '#table1' );  
+      table_sorter( '#table1' ).hover();
 
   }); // document.ready   
    
 </script>   
      
-<style>
-  th {
-    background-color: silver;
-  }         
-         
-  /* add hover effect for table rows */  
-  td.hovered {  
-     background-color: aqua; 
-  }
-    
-  th.sortable {
-    cursor: pointer;
-    padding-right: 23px;
-    background-repeat: no-repeat;
-    background-position: right center;
-    background-image: url('i/bg.gif');
-  }
-      
-  th.sortable.sorted-asc,
-  th.sortable.sorted-desc  {
-    color: white;
-    background-color: grey;
-  }
-  
-  th.sortable.sorted-asc {
-    background-image: url('i/asc.gif');
-  }
 
-  th.sortable.sorted-desc {
-    background-image: url('i/desc.gif');
-  }
-  
-
-  th.sortable:hover {
-    color: black;
-    background-color: yellow; 
-    text-decoration: underline;    
-  }
-
-        
-     </style>
    </head>
    <body>
 
