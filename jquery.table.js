@@ -5,7 +5,7 @@
 
     function _debug( msg )
     {
-      // console.log( "[debug] " + msg ); 
+       // console.log( "[debug] " + msg ); 
     }
     
     var keyFuncs = {
@@ -38,23 +38,27 @@
           "date"   : function(text) {
             _debug( "convDate before >" + text +"<" );
             text = text.replace( /\-/g, '/' );
-            var f = 0;
+            
+            // NB: 0 == 1970/1/1, thus, lets use 1800/1/1 for now
+            var f = parseFloat( new Date( '1800/01/01' ).getTime() ); 
+
             // current date format DD{1,2}/MM{1,2}/YYYY supported:
             // e.g.   12.02.1999 or 12/2/1999 or 1-12-2011
             var re = /(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})/;
             var match = re.exec( text );            
             if( match ) {
-              text = match[3]+"-"+match[2]+"-"+match[1];              
+              text = match[3]+"/"+match[2]+"/"+match[1];              
               _debug( "convDate match >" + text + "<" );
  
-              year  = parseInt( match[3], 10 );
-              month = parseInt( match[2], 10 )-1;  // NB:  beginning with 0 for January to 11 for December.
-              day   = parseInt( match[1], 10 );
-
-              text = year+"-"+month+"-"+day;
-              _debug( "convDate date ints>" + text + "<" );              
+              // year  = parseInt( match[3], 10 );
+              // month = parseInt( match[2], 10 )-1;  // NB:  beginning with 0 for January to 11 for December.
+              // day   = parseInt( match[1], 10 );
+              //
+              // text = year+"-"+month+"-"+day;
+              // _debug( "convDate date ints>" + text + "<" );
+              
               // todo: check what happens if date is invalid?? do we get an exception? invalid object?
-              var f = parseFloat( new Date( year, month, day ).getTime() );
+              var f = parseFloat( new Date( text ).getTime() );
               if(isNaN(f))
                  f = 0;
             }
