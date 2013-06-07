@@ -140,10 +140,11 @@ Using `data-input='true'` lets you use the value from an input text control
        </tfoot>
     </table>
 
-## Ruby on Rails Integration - `jquery-table-js-rails` Ruby gems
+## Ruby on Rails Integration - `jquery-table-js-rails` Ruby Gem
 
-Gabor Garami has bundled up the jquery.table.js script into a Ruby gems for easy integration for Ruby on Rails app.
-More info @ [github.com/hron84/jquery-table-js-rails](https://github.com/hron84/jquery-table-js-rails); Ruby gem @ [rubygems.org/gems/jquery-table-js-rails](https://rubygems.org/gems/jquery-table-js-rails)
+Gabor Garami has bundled up the jquery.table.js script into a Ruby gem for easy integration for Rails apps.
+More info @ [`github.com/hron84/jquery-table-js-rails`](https://github.com/hron84/jquery-table-js-rails)
+or [`rubygems.org/gems/jquery-table-js-rails`](https://rubygems.org/gems/jquery-table-js-rails)
 
 ## License
 
