@@ -248,7 +248,9 @@
     groupClass = opts.groupClass;    
     hasGroupClass =  $.type( groupClass ) === 'string';
     
+    // nb: will find w/ selector or wrap vanilla javascript this in jquery wrapped $(this)
     $table = $( table_id );
+    
     $tbody = $table.find( 'tbody' );
  
     if( hasGroupClass  )
@@ -374,3 +376,43 @@
       });    
     }); // each table
   }   
+
+
+////////////////////
+// wrapper for jquery plugin
+
+
+(function( $ ) {
+
+    function debug( msg ) {
+      if( window.console && window.console.log ) {
+        window.console.log( "[debug] "+msg );
+      }
+    }
+
+    function setup_table_sorter( table_el, opts ) {
+      debug( "hello from setup_table_sorter" );
+      var table_sorter = table_sorter_new( table_el, opts );
+      var $table = $(table_el);
+      
+      // NB: attach table sorter to dom table element
+      // - use like $('#table1').data( 'table_sorter' ).hover().sort(1); etc.
+      //  or
+      //   var t = $('#table1').data( 'table_sorter' );
+      //    t.hover().sort(1);
+      $table.data( 'table_sorter', table_sorter );  
+      return table_el;
+    }
+
+    debug( 'add jquery fn table_sorter' );
+
+    $.fn.table_sorter = function( opts ) {
+        debug( "calling table_sorter" );
+        return this.each( function( index, table_el ) {
+          debug( "before setup_table_sorter["+ index +"]" );
+          setup_table_sorter( table_el, opts );
+          debug( "after setup_table_sorter["+ index +"]" );
+        });
+    };
+
+}( jQuery ));
