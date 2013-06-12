@@ -1,0 +1,26 @@
+{
+  "name": "table",
+  "version": "1.0.0",
+  "title": "jquery.table.js",
+  "description": "Another simple table sorter.",
+  "keywords": [
+    "table",
+    "sorter"
+  ],
+  "author": {
+    "name": "Gerald Bauer",
+    "url": "https://github.com/geraldb"
+  },
+  "licenses": [
+    {
+      "type": "Public Domain",
+      "url": "http://en.wikipedia.org/wiki/Public_domain"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=1.10"
+  },
+  "homepage": "https://github.com/geraldb/jquery.table.js",
+  "docs": "https://github.com/geraldb/jquery.table.js",
+  "download": "http://code.jquery.com/#table"
+}
