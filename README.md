@@ -2,6 +2,12 @@
 
 Lets you sort, filter tables using JavaScript w/ jQuery
 
+## Live Demo
+
+Try the table demo running
+on GitHub Pages [`geraldb.github.io/jquery.table.js/demo/demo1.html`](http://geraldb.github.io/jquery.table.js/demo/demo1.html).
+
+
 ## How to use
 
 Include the `jquery.table.js` script after the jquery library. Example:
