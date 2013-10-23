@@ -9,7 +9,7 @@ Lets you sort, filter tables using JavaScript w/ jQuery
 * Demo 3 -> [demo/demo3.html](http://libsjs.github.io/jquery.table.js/demo/demo3.html)
 * Demo 4 -> [demo/demo4.html](http://libsjs.github.io/jquery.table.js/demo/demo4.html)
 * Demo 5 -> [demo/demo5.html](http://libsjs.github.io/jquery.table.js/demo/demo5.html)
-* Demo Plugin -> [demo/demo.plugin.html](http://libsjs.github.io/jquery.table.js/demo/demo.plugin..html)
+* Demo Plugin -> [demo/demo.plugin.html](http://libsjs.github.io/jquery.table.js/demo/demo.plugin.html)
 
 
 ## How to use
