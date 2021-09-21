@@ -1,10 +1,11 @@
 
-> Q: Dear sir, how do I get rich [in crypto]?
+> Q: Dear sir, how do I get rich in ~bits-coin~ punks?
 >
-> A: If we all buy ~bitcoin~ punks from one another
+> A: If we all buy ~bits-coin~ punks from one another
 > at ever higher prices we'll all be rich beyond our wildest dreams.
 >
-> 21 million bitcoin. 10 000 punks. Do the math.
+> 21 million bits-coin. 10 000 punks. Do the math.
+
 
 
 
