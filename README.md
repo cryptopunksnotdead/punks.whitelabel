@@ -11,8 +11,6 @@
 
 
 
-![](i/archetypes-strip.png)
-
 # Punks - The Free White Label Quick Starter Edition
 
 Let's (re)create from zero / scratch a clean-room
@@ -334,7 +332,7 @@ def generate_punk( *values, dir: "./basic" )
            end
 
   attribute_names.each do |attribute_name|
-     next if attribute_name.nil? || attribute_name.empty?  ## note: skip nil or empty string attributes
+     next if attribute_name.nil? || attribute_name.empty?  ## note: skip nil/empty attributes
 
      attribute_name = normalize( attribute_name )
      path           = "#{dir}/#{m_or_f}/#{attribute_name}.png"
@@ -349,12 +347,18 @@ end # method generate
 
 
 Let's test drive punk #0 and punk 1 (see above)
-and voila!
+and voila! In the original 24×24 format:
 
 
-![](i/punk0.png)  ![](i/punk0@20x.png)
+![](i/punk0.png)
+![](i/punk1.png)
 
-![](i/punk1.png)  ![](i/punk1@20x.png)
+
+And 20x (480×480):
+
+![](i/punk0@20x.png)
+![](i/punk1@20x.png)
+
 
 
 Note: If you use your own building blocks
