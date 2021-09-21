@@ -13,11 +13,11 @@
 
 # Punks - The Free White Label Quick Starter Edition
 
-Let's (re)create from zero / scratch a clean-room
+Let's (re)create from zero / scratch a pixel-perfect
 copy of the 10 000 CryptoPunks collection (Anno 2017).
 
 Yes, you can. Do-it-yourself (DIY) and
-own 100% forever your home-made free pixel-perfect copy
+own 100% forever your home-made free clean-room copy
 of the billion dollar (2400×2400) bitmap
 that kicked-off
 a trillion dollar get-rich-quick digital art
