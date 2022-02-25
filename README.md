@@ -14,7 +14,7 @@
 # Punks - The Free White Label Quick Starter Edition
 
 Let's (re)create from zero / scratch a pixel-perfect
-copy of the 10 000 CryptoPunks collection (Anno 2017).
+copy of the Matt & John's® 10 000 punks collection (Anno 2017).
 
 Yes, you can. Do-it-yourself (DIY) and
 own 100% forever your home-made free clean-room copy
