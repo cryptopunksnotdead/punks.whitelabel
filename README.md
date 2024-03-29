@@ -2,7 +2,7 @@
 ---
 
 **Breaking News**  - Looking for the 100 Ordinal Punks collection inscribed into the bitcoin blockchain on February 9th, 2023?
-See [**100 Ordinal Punks - The Free White Label Quick Starter Edition »**](https://github.com/cryptopunksnotdead/cryptopunks/tree/master/ordinalpunks)
+See [**100 Ordinal Punks - The Free White Label Quick Starter Edition »**](https://github.com/ordinalpunks/ordinalpunks.starter)
 
 ---
 
